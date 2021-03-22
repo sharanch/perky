@@ -204,9 +204,7 @@
     <div class="pages">
         <span class="hidden pagination">first</span>
         <span class="active pagination">1</span>
-        <span class="pagination">2</span>
-        <span class="pagination">3</span>
-        <span class="pagination">last</span>
+        <span class="pagination">next</span>
     </div>
 
     <div class="footer"><p class="footer-notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</p><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" alt=""></div>
@@ -282,6 +280,21 @@
                 window.location.reload()
             }
         })
+        
+        function removeClass(){
+                pages.forEach(page=> {
+                    page.classList.remove('active')
+                })
+            }
+            pages.forEach(page=>{
+                page.addEventListener('click', function(){
+                    removeClass()
+                    page.classList.toggle('active')
+                    pageNumber += 1
+                    current = page_url + pageNumber
+                    getMovies(current)
+                })
+            })
     </script>
 </body>
 </html>
