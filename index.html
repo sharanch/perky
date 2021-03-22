@@ -181,6 +181,17 @@
         .pagination:hover{
             cursor: pointer;
         }
+        
+        a{
+            margin-top: 2.7vh;
+            margin-bottom: 0vh;
+            text-decoration: none;
+            transition-duration: 300ms;
+        }
+
+        a:hover{
+            transform: scale(1.2);
+        }
 
         .active:hover{
             cursor: default;
@@ -205,6 +216,8 @@
             <input type="text" id="search" class="search" placeholder="search for favorites" autocomplete="off">
         </form>
     </header>
+    
+    <a name="top"></a>
 
     <main id="main"></main>
       <!-- well fucntion code -->
@@ -220,9 +233,11 @@
             last page
         </span>
         <span class="pagination active" id="current"> 1 </span>
-        <span class="pagination scale" id="next">
+        <a href="#top">
+            <span class="pagination scale" id="next">
             next page
         </span>
+        </a>
     </div>
     
     <div class="footer"><p class="footer-notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</p><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" alt=""></div>
