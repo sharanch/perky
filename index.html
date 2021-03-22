@@ -5,7 +5,157 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./icon/icon.png">
-    <link rel="stylesheet" href="./styles/styles.css">
+    <style>
+        
+        *{
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        :root{
+            --primary-color: #252525;
+            --secondary-color: #191919;
+        }
+
+        body{
+            background-color: var(--secondary-color);
+            margin: 0px;
+            padding: 0px;
+            /* display: flex;
+            justify-content: center; */
+        }
+
+        header{
+            position: sticky;
+            top: 0px;
+            width: 100vw;
+            display: flex;
+            justify-content: space-around;
+            z-index: 2;
+            background-color: white;
+        }
+
+        .logo{
+            width: 60px;
+            transition-duration: 500ms;
+        }
+
+        .logo:hover{
+            width: 70px;
+        }
+        .logo:focus{
+            outline: none;
+        }
+
+        .search{
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            margin-top: 0.9rem;
+            color: white;
+        }
+
+        .year{
+            size: 12px;
+            margin-right: 4px;
+            background-color: var(--secondary-color);
+        }
+
+        .search::placeholder{
+            color: #494949;
+        }
+
+        .search:focus{
+            outline: none;
+            background-color: var(--primary-color);
+        }
+
+        main{
+            min-width: 100vw;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .movie{
+            width: 250px;
+            margin: 1rem;
+            background-color: var(--secondary-color);
+            box-shadow: 0 5px 20px rgba(19, 19, 19, 0.5);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie img{
+            width: 100%;
+        }
+
+        .movie-info{
+            color: whitesmoke;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0.5rem 1rem 1rem;
+            letter-spacing: 1px;
+        }
+
+        .movie-info h3 {
+            margin-top: 0%;
+        }
+
+        .movie-info span{
+            background-color: var(--primary-color);
+            padding: 0.3rem 0.5rem;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .movie-info span.green{
+            color: lightgreen;
+        }
+        .movie-info span.orange{
+            color: orange;
+        }
+        .movie-info span.red{
+            color: red;
+        }
+
+        .overview{
+            background-color: whitesmoke;
+            padding: 2rem;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            max-height: 100%;
+            transform: translateY(101%);
+            transition-duration: 0.5s;
+        }
+
+        .movie:hover .overview{
+            transform: translateY(0);
+        }
+
+        .footer{
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            min-width: 100vw;
+            display: flex;
+            justify-content:space-between;
+            color: rgb(190, 190, 190);
+            background-color: rgb(50, 50, 50);
+            margin-top: 5rem;
+        }
+
+        .footer img{
+            width: 90px
+        }
+    </style>
     <title>perky</title>
 </head>
 <body>
@@ -20,6 +170,77 @@
 
     <div class="footer"><p class="footer-notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</p><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" alt=""></div>
 
-    <script src="./app/app.js"></script>
+    <script>
+        
+        const api_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1'
+        const img_url = 'https://image.tmdb.org/t/p/w1280'
+        const search_url = 'https://api.themoviedb.org/3/search/movie?api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1&query="'
+
+        const main = document.getElementById('main')
+        const form = document.getElementById('form')
+        const search = document.getElementById('search')
+
+        getMovies(api_url)
+
+        async function getMovies(url) {
+            const res = await fetch(url)
+            const data = await res.json()
+
+            showMovies(data.results)
+        }
+
+        function showMovies(movies) {
+            main.innerHTML = ''
+
+            movies.forEach((movie) => {
+                const { title, poster_path, vote_average, release_date, overview } = movie
+
+                const movieEl = document.createElement('div')
+                movieEl.classList.add('movie')
+
+                movieEl.innerHTML = `
+                    <img src="${img_url + poster_path}" alt="${title}">
+                    <div class="movie-info">
+                  <h3>${title}</h3>
+                  <div class="year"><h6>${releaseyear(release_date)}</div>
+                  <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+                    </div>
+                    <div class="overview">
+                  <h3>Overview</h3>
+                  ${overview}
+                </div>
+                `
+                main.appendChild(movieEl)
+            })
+        }
+
+        function releaseyear(year){
+            return year.slice(0, 4)
+        }
+
+        function getClassByRate(vote) {
+            if(vote >= 8) {
+                return 'green'
+            } else if(vote >= 5) {
+                return 'orange'
+            } else {
+                return 'red'
+            }
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            const searchTerm = search.value
+
+            if(searchTerm && searchTerm !== '') {
+                getMovies(search_url + searchTerm)
+
+                search.value = ''
+            } else {
+                window.location.reload()
+            }
+        })
+    </script>
 </body>
 </html>
