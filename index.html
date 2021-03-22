@@ -200,107 +200,144 @@
     </header>
 
     <main id="main"></main>
-    
-    <div class="pages">
+      <!-- well fucntion code -->
+<!--     <div class="pages">
         <span class="hidden pagination">first</span>
         <span class="active pagination">1</span>
         <span class="pagination">next</span>
     </div>
-
+ -->
+    
+    <div class="pages">
+        <span class="pagination scale" id="last">
+            last page
+        </span>
+        <span class="pagination active" id="current"> 1 </span>
+        <span class="pagination scale" id="next">
+            next page
+        </span>
+    </div>
+    
     <div class="footer"><p class="footer-notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</p><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" alt=""></div>
 
     <script>
+        
+            const api_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1'
+            const img_url = 'https://image.tmdb.org/t/p/w1280'
+            const search_url = 'https://api.themoviedb.org/3/search/movie?api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1&query="'
 
-        const api_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1'
-        const img_url = 'https://image.tmdb.org/t/p/w1280'
-        const search_url = 'https://api.themoviedb.org/3/search/movie?api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1&query="'
+            let present = document.getElementById('current')
+            let page_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page='
+            // let pages = document.querySelectorAll('.pagination')
 
-        let last = document.querySelector('.last')
-        let page_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page='
-        let pages = document.querySelectorAll('.pagination')
+            let last = document.getElementById('last')
+            let next = document.getElementById('next')
 
-        const main = document.getElementById('main')
-        const form = document.getElementById('form')
-        const search = document.getElementById('search')
+            const main = document.getElementById('main')
+            const form = document.getElementById('form')
+            const search = document.getElementById('search')
 
-        getMovies(api_url)
+            getMovies(api_url)
 
-        let pageNumber = 1
+            let pageNumber = 1
 
-        async function getMovies(url) {
-            const res = await fetch(url)
-            const data = await res.json()
+            async function getMovies(url) {
+                const res = await fetch(url)
+                const data = await res.json()
 
-            showMovies(data.results)
-        }
+                showMovies(data.results)
+            }
 
-        function showMovies(movies) {
-            main.innerHTML = ''
+            function showMovies(movies) {
+                main.innerHTML = ''
 
-            movies.forEach((movie) => {
-                const { title, poster_path, vote_average, release_date, overview } = movie
+                movies.forEach((movie) => {
+                    const { title, poster_path, vote_average, release_date, overview } = movie
 
-                const movieEl = document.createElement('div')
-                movieEl.classList.add('movie')
+                    const movieEl = document.createElement('div')
+                    movieEl.classList.add('movie')
 
-                movieEl.innerHTML = `
-                    <img src="${img_url + poster_path}" alt="${title}">
-                    <div class="movie-info">
-                  <h3>${title}</h3>
-                  <div class="year"><h6>${releaseyear(release_date)}</div>
-                  <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+                    movieEl.innerHTML = `
+                        <img src="${img_url + poster_path}" alt="${title}">
+                        <div class="movie-info">
+                      <h3>${title}</h3>
+                      <div class="year"><h6>${releaseyear(release_date)}</div>
+                      <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+                        </div>
+                        <div class="overview">
+                      <h3>Overview</h3>
+                      ${overview}
                     </div>
-                    <div class="overview">
-                  <h3>Overview</h3>
-                  ${overview}
-                </div>
-                `
-                main.appendChild(movieEl)
-            })
-        }
-
-        function releaseyear(year){
-            return year.slice(0, 4)
-        }
-
-        function getClassByRate(vote) {
-            if(vote >= 8) {
-                return 'green'
-            } else if(vote >= 5) {
-                return 'orange'
-            } else {
-                return 'red'
+                    `
+                    main.appendChild(movieEl)
+                })
             }
-        }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault()
-
-            const searchTerm = search.value
-
-            if(searchTerm && searchTerm !== '') {
-                getMovies(search_url + searchTerm)
-
-                search.value = ''
-            } else {
-                window.location.reload()
+            function releaseyear(year){
+                return year.slice(0, 4)
             }
-        })
 
-        function removeClass(){
-            pages.forEach(page=> {
-                page.classList.remove('active')
+            function getClassByRate(vote) {
+                if(vote >= 8) {
+                    return 'green'
+                } else if(vote >= 5) {
+                    return 'orange'
+                } else {
+                    return 'red'
+                }
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault()
+
+                const searchTerm = search.value
+
+                if(searchTerm && searchTerm !== '') {
+                    getMovies(search_url + searchTerm)
+
+                    search.value = ''
+                } else {
+                    window.location.reload()
+                }
             })
-        }
-        pages.forEach(page=>{
-            page.addEventListener('click', function(){
-                removeClass()
-                page.classList.toggle('active')
+
+            //well funcitoning code
+
+
+            // function removeClass(){
+            //     pages.forEach(page=> {
+            //         page.classList.remove('active')
+            //     })
+            // }
+            // pages.forEach(page=>{
+            //     page.addEventListener('click', function(){
+            //         removeClass()
+            //         page.classList.toggle('active')
+            //         pageNumber += 1
+            //         current = page_url + pageNumber
+            //         getMovies(current)
+            //     })
+            // })
+
+            // last.addEventListener('click', ()=>{
+            //     getMovies(api_url)
+            // })
+
+            last.addEventListener('click', function(){
+                console.log('hello last page')
+                pageNumber -= 1
+                current = page_url + pageNumber
+                getMovies(current)
+                present.innerHTML = `${pageNumber}`
+            })
+
+            next.addEventListener('click', function(){
+                console.log('hello next page')
                 pageNumber += 1
                 current = page_url + pageNumber
                 getMovies(current)
+                present.innerHTML = `${pageNumber}`
             })
-        })
     </script>
 </body>
 </html>
