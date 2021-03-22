@@ -210,16 +210,22 @@
     <div class="footer"><p class="footer-notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</p><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" alt=""></div>
 
     <script>
-        
+
         const api_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1'
         const img_url = 'https://image.tmdb.org/t/p/w1280'
         const search_url = 'https://api.themoviedb.org/3/search/movie?api_key=6ba7bbb3e4daaac860be860ed95f1f30&page=1&query="'
+
+        let last = document.querySelector('.last')
+        let page_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=6ba7bbb3e4daaac860be860ed95f1f30&page='
+        let pages = document.querySelectorAll('.pagination')
 
         const main = document.getElementById('main')
         const form = document.getElementById('form')
         const search = document.getElementById('search')
 
         getMovies(api_url)
+
+        let pageNumber = 1
 
         async function getMovies(url) {
             const res = await fetch(url)
@@ -280,21 +286,21 @@
                 window.location.reload()
             }
         })
-        
+
         function removeClass(){
-                pages.forEach(page=> {
-                    page.classList.remove('active')
-                })
-            }
-            pages.forEach(page=>{
-                page.addEventListener('click', function(){
-                    removeClass()
-                    page.classList.toggle('active')
-                    pageNumber += 1
-                    current = page_url + pageNumber
-                    getMovies(current)
-                })
+            pages.forEach(page=> {
+                page.classList.remove('active')
             })
+        }
+        pages.forEach(page=>{
+            page.addEventListener('click', function(){
+                removeClass()
+                page.classList.toggle('active')
+                pageNumber += 1
+                current = page_url + pageNumber
+                getMovies(current)
+            })
+        })
     </script>
 </body>
 </html>
