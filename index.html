@@ -162,32 +162,39 @@
             justify-content: center;
             padding: 2vh 2vh;
             border-radius: 30px;
+            margin-left: 5px;
+
         }
 
-        .pages .pagination{
+        .pagination{
             background-color: rgb(19, 19, 19);
             margin: 1vh;
             padding: 1vh;
             border-radius: 6px;
             color: rgb(190, 190, 190);
             font-weight: bolder;
-        }
-
-        .hidden{
-            opacity: 0.3;
-        }
-
-        .pages span.active{
-            transform: scale(1.4);
+            transition-duration: 300ms;
+            margin-left: 25px;
+            padding: 10px;
         }
 
         .pagination:hover{
             cursor: pointer;
         }
 
-        .pagination.hidden:hover{
-            cursor:default
+        .active:hover{
+            cursor: default;
         }
+
+        .scale:hover{
+            transform: scale(1.2);
+        }
+
+        .active{
+            opacity: 0.5;
+        }
+
+
     </style>
     <title>perky</title>
 </head>
